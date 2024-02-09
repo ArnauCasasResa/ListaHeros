@@ -1,10 +1,14 @@
 package com.example.lista
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -18,6 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -36,27 +41,33 @@ import com.example.retrofitapp.viewmodel.APIViewModel
 
 @Composable
 fun MenuScreen(navController:NavController,myViewModel: APIViewModel){
-    MyRecyclerView(myViewModel )
+    
+    MyRecyclerView(myViewModel)
 }
 
 @Composable
 fun MyRecyclerView(myViewModel: APIViewModel) {
     val showLoading: Boolean by myViewModel.loading.observeAsState(true)
     val characters: ListaHeros by myViewModel.characters.observeAsState(
-        ListaHeros(emptyList(),0,0,0))
+        ListaHeros())
     myViewModel.getCharacters()
     if(showLoading){
-        CircularProgressIndicator(
-            modifier = Modifier.width(64.dp),
-            color = MaterialTheme.colorScheme.secondary
-        )
+
+        Column(modifier = Modifier
+            .padding(20.dp)
+            .fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally){
+            Spacer(modifier = Modifier.height(300.dp))
+            CircularProgressIndicator(
+                modifier = Modifier.width(64.dp),
+                color = MaterialTheme.colorScheme.secondary
+            )
+        }
     }
     else{
         LazyColumn() {
-            items(characters.characters) {
+            items(characters) {
                 CharacterItem(character = it)
             }
-
         }
     }
 }
@@ -65,24 +76,34 @@ fun MyRecyclerView(myViewModel: APIViewModel) {
 @Composable
 fun CharacterItem(character: Hero) {
     Card(
-        border = BorderStroke(2.dp, Color.LightGray),
+        border = BorderStroke(2.dp, Color.Transparent),
         shape = RoundedCornerShape(8.dp),
-        modifier = Modifier.padding(8.dp)
+        modifier = Modifier
+            .padding(8.dp)
+            .clickable { }
     ) {
         Row(modifier = Modifier
             .padding(16.dp)
-            .fillMaxWidth()) {
+            .fillMaxWidth(),) {
+            Text(
+                text = "${character.id }.  ",
+                style = MaterialTheme.typography.bodyLarge
+            )
             GlideImage(
-                model = character.images,
+                model = character.images.lg,
                 contentDescription = "Character Image",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.size(100.dp)
             )
-            Text(
-                text = character.name,
-                style = MaterialTheme.typography.bodyLarge,
-                textAlign = TextAlign.Center, modifier = Modifier.fillMaxSize()
-            )
+            Column() {
+                Text(
+                    text = character.name,
+                    style = MaterialTheme.typography.bodyLarge,
+                    textAlign = TextAlign.Center, modifier = Modifier.fillMaxSize()
+                )
+
+            }
+
         }
     }
 }
