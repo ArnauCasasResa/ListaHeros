@@ -11,9 +11,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.example.lista.model.Hero
 import com.example.lista.ui.theme.ListaTheme
 import com.example.retrofitapp.viewmodel.APIViewModel
 
@@ -34,6 +37,11 @@ import com.example.retrofitapp.viewmodel.APIViewModel
                         startDestination = Routes.MenuScreen.route
                     ) {
                         composable(Routes.MenuScreen.route) { MenuScreen(navigationController,myViewModel) }
+                        composable(Routes.DetailScreen.route,
+                            arguments = listOf(navArgument("personatjeId" ) {type =
+                                NavType.IntType})
+                            ) { backStackEntry ->DetailScreen(navigationController,myViewModel,
+                            backStackEntry. arguments?.getInt("personatjeId" ) ?:0 ) }
                     }
                 }
             }
@@ -46,5 +54,6 @@ import com.example.retrofitapp.viewmodel.APIViewModel
 @Composable
 fun GreetingPreview() {
     ListaTheme {
+
     }
 }

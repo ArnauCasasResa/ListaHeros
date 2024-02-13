@@ -7,12 +7,15 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Path
 
 interface interfaceApi {
 
     @GET("all.json")
     suspend fun getHeros(): Response<ListaHeros>
 
+    @GET("id/{id}.json")
+    suspend fun getHero(@Path("id")heroId:Int):Response<Hero>
     companion object {
         val BASE_URL = "https://akabab.github.io/superhero-api/api/"
         fun create(): interfaceApi {
