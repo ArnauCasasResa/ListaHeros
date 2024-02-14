@@ -55,7 +55,7 @@ fun MenuScreen(navController:NavController,myViewModel: APIViewModel){
     else{
         LazyColumn() {
             items(characters) {
-                CharacterItem(character = it,navController)
+                CharacterItem(character = it,navController,myViewModel)
             }
         }
     }
@@ -63,13 +63,14 @@ fun MenuScreen(navController:NavController,myViewModel: APIViewModel){
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun CharacterItem(character: Hero, navController: NavController) {
+fun CharacterItem(character: Hero, navController: NavController,myViewModel: APIViewModel) {
     Card(
         border = BorderStroke(2.dp, Color.Transparent),
         shape = RoundedCornerShape(8.dp),
         modifier = Modifier
             .padding(8.dp)
-            .clickable {navController .navigate(Routes.DetailScreen.createRoute(character.id)) }
+            .clickable {myViewModel.setIdx(character.id)
+                navController.navigate(Routes.DetailScreen.route) }
     ) {
         Row(modifier = Modifier
             .padding(16.dp)

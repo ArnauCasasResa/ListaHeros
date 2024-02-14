@@ -31,12 +31,12 @@ import retrofit2.Response
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun DetailScreen(navController: NavController, myViewModel: APIViewModel,personatgeId:Int){
+fun DetailScreen(navController: NavController, myViewModel: APIViewModel){
     val characters: ListaHeros by myViewModel.characters.observeAsState(ListaHeros())
     val apiInterface = interfaceApi.create()
+    myViewModel.getCharacter(myViewModel.getIdx())
+    val personatgeEscollit by myViewModel.character.observeAsState()
 
-    var personatgeEscollit=myViewModel.character
-    myViewModel.getCharacter(personatgeId)
     Card(
         border = BorderStroke(2.dp, Color.Transparent),
         shape = RoundedCornerShape(8.dp),
@@ -47,21 +47,23 @@ fun DetailScreen(navController: NavController, myViewModel: APIViewModel,persona
             .padding(16.dp)
             .fillMaxWidth(),) {
             Text(
-                text = "${personatgeEscollit.id}.",
+                text = "${personatgeEscollit?.id}.",
                 style = MaterialTheme.typography.bodyLarge
             )
             GlideImage(
-                model = personatgeEscollit.images.lg,
+                model = personatgeEscollit?.images?.lg,
                 contentDescription = "Character Image",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.size(100.dp)
             )
             Column() {
-                Text(
-                    text = personatgeEscollit.name,
-                    style = MaterialTheme.typography.bodyLarge,
-                    textAlign = TextAlign.Center, modifier = Modifier.fillMaxSize()
-                )
+                personatgeEscollit?.let {
+                    Text(
+                        text = it.name,
+                        style = MaterialTheme.typography.bodyLarge,
+                        textAlign = TextAlign.Center, modifier = Modifier.fillMaxSize()
+                    )
+                }
 
             }
 
