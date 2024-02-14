@@ -6,5 +6,5 @@ sealed class Routes(val route: String)
 {
     object MenuScreen:Routes("menu_screen" )
     object DetailScreen:Routes("detail_screen" )
-    object Pantalla3:Routes("pantalla3" )
+    object FavScreen:Routes("fav_screen" )
 }

@@ -22,6 +22,7 @@ class APIViewModel: ViewModel() {
     val loading = _loading
     private val _characters = MutableLiveData<ListaHeros>()
     val characters = _characters
+    var favCharacter=MutableLiveData<ListaHeros>()
     var character=MutableLiveData<Hero>()
     var id=0
     fun getCharacters(){

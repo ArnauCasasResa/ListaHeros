@@ -65,6 +65,7 @@ class MainActivity : ComponentActivity() {
                             ) {
                                 composable(Routes.MenuScreen.route) {MenuScreen(navigationController,myViewModel) }
                                 composable(Routes.DetailScreen.route) {DetailScreen(navigationController,myViewModel)}
+                                composable(Routes.FavScreen.route) {FavScreen(navigationController,myViewModel)}
                             }
                         }
                     }
