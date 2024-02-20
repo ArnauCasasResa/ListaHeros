@@ -110,7 +110,7 @@ fun MyBottomBar(navController:NavController){
         BottomNavigationItem(selected =true , onClick = { navController.navigate(Routes.MenuScreen.route) },
             icon = {Icon(Icons.Filled.Home, contentDescription = "home") }
         )
-        BottomNavigationItem(selected =true , onClick = { /*TODO*/ },
+        BottomNavigationItem(selected =true , onClick = { navController.navigate(Routes.FavScreen.route) },
             icon = {Icon(Icons.Filled.Favorite, contentDescription = "favourite") }
         )
         BottomNavigationItem(selected =true , onClick = { /*TODO*/ },

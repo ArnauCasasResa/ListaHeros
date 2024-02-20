@@ -2,6 +2,7 @@ package com.example.lista
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -25,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
@@ -38,10 +40,10 @@ import com.example.retrofitapp.viewmodel.APIViewModel
 @Composable
 fun FavScreen(navController: NavController,myViewModel:APIViewModel){
     val showLoading: Boolean by myViewModel.loading.observeAsState(true)
-    val favCharacters: ListaHeros by myViewModel.favCharacter.observeAsState(ListaHeros())
+    val characters: ListaHeros by myViewModel.characters.observeAsState(
+        ListaHeros())
     myViewModel.getCharacters()
     if(showLoading){
-
         Column(modifier = Modifier
             .padding(20.dp)
             .fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally){
@@ -54,8 +56,10 @@ fun FavScreen(navController: NavController,myViewModel:APIViewModel){
     }
     else{
         LazyColumn() {
-            items(favCharacters) {
-                FavCharacterItem(character = it,navController,myViewModel)
+            items(characters) {
+                if (it.fav){
+                    FavCharacterItem(character = it,navController,myViewModel)
+                }
             }
         }
     }
@@ -63,16 +67,14 @@ fun FavScreen(navController: NavController,myViewModel:APIViewModel){
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun FavCharacterItem(character: Hero, navController: NavController, myViewModel: APIViewModel) {
+fun FavCharacterItem(character: Hero, navController: NavController,myViewModel: APIViewModel) {
     Card(
         border = BorderStroke(2.dp, Color.Transparent),
         shape = RoundedCornerShape(8.dp),
         modifier = Modifier
             .padding(8.dp)
-            .clickable {
-                myViewModel.setIdx(character.id)
-                navController.navigate(Routes.DetailScreen.route)
-            }
+            .clickable {myViewModel.setIdx(character.id)
+                navController.navigate(Routes.DetailScreen.route) }
     ) {
         Row(modifier = Modifier
             .padding(16.dp)
@@ -99,5 +101,3 @@ fun FavCharacterItem(character: Hero, navController: NavController, myViewModel:
         }
     }
 }
-
-

@@ -22,9 +22,14 @@ class APIViewModel: ViewModel() {
     val loading = _loading
     private val _characters = MutableLiveData<ListaHeros>()
     val characters = _characters
-    var favCharacter=MutableLiveData<ListaHeros>()
+
+
+    private var _favCharacters=MutableLiveData<MutableList<Hero>>()
+    var favCharacters=_favCharacters
+    private var _isFavorite=MutableLiveData<Boolean>()
+    var isFavorite=_isFavorite
     var character=MutableLiveData<Hero>()
-    var id=0
+    private var id=0
     fun getCharacters(){
         CoroutineScope(Dispatchers.IO).launch {
             val response = repository.getAllCharacters()
@@ -50,6 +55,33 @@ class APIViewModel: ViewModel() {
                 else{
                     Log.e("Error :", response.message())
                 }
+            }
+        }
+    }
+    fun getFavorites(){
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = repository.getFavourites()
+            withContext(Dispatchers.Main) {
+                _favCharacters.value = response
+                _loading.value = false
+            }
+        }
+    }
+    fun saveAsFavorite(character:Hero){
+        CoroutineScope(Dispatchers.IO).launch {
+            repository.saveAsFavourite(character)
+        }
+    }
+    fun removeFavorite(character:Hero){
+        CoroutineScope(Dispatchers.IO).launch {
+            repository.deleteFavourite(character)
+        }
+    }
+    fun isFavorite(character:Hero){
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = repository.isFavourite(character)
+            withContext(Dispatchers.Main){
+                _isFavorite.value=response
             }
         }
     }
