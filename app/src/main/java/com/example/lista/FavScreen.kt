@@ -40,9 +40,8 @@ import com.example.retrofitapp.viewmodel.APIViewModel
 @Composable
 fun FavScreen(navController: NavController,myViewModel:APIViewModel){
     val showLoading: Boolean by myViewModel.loading.observeAsState(true)
-    val characters: ListaHeros by myViewModel.characters.observeAsState(
-        ListaHeros())
-    myViewModel.getCharacters()
+    val characters: MutableList<Hero> by myViewModel.favCharacters.observeAsState(ListaHeros())
+    myViewModel.getFavorites()
     if(showLoading){
         Column(modifier = Modifier
             .padding(20.dp)
@@ -55,12 +54,14 @@ fun FavScreen(navController: NavController,myViewModel:APIViewModel){
         }
     }
     else{
-        LazyColumn() {
-            items(characters) {
-                if (it.fav){
+        if (characters.isNotEmpty()){
+            LazyColumn() {
+                items(characters) {
                     FavCharacterItem(character = it,navController,myViewModel)
                 }
             }
+        }else{
+            Text(text = "No hay personajes en favoritos.")
         }
     }
 }
@@ -73,8 +74,10 @@ fun FavCharacterItem(character: Hero, navController: NavController,myViewModel: 
         shape = RoundedCornerShape(8.dp),
         modifier = Modifier
             .padding(8.dp)
-            .clickable {myViewModel.setIdx(character.id)
-                navController.navigate(Routes.DetailScreen.route) }
+            .clickable {
+                myViewModel.setIdx(character.id)
+                navController.navigate(Routes.DetailScreen.route)
+            }
     ) {
         Row(modifier = Modifier
             .padding(16.dp)

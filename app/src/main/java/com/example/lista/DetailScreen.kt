@@ -15,6 +15,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.Card
@@ -24,6 +25,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -41,8 +44,9 @@ import retrofit2.Response
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun DetailScreen(navController: NavController, myViewModel: APIViewModel){
+fun DetailScreen( myViewModel: APIViewModel){
     myViewModel.getCharacter(myViewModel.getIdx())
+    myViewModel.character.value?.let { myViewModel.isFavorite(it) }
     val personatgeEscollit by myViewModel.character.observeAsState()
     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
         Card(
@@ -76,12 +80,18 @@ fun DetailScreen(navController: NavController, myViewModel: APIViewModel){
             }
         }
         Box(modifier = Modifier
-            .background(Color.Red)
             .clickable {
-                personatgeEscollit?.let { myViewModel.saveAsFavorite(it) }
+                if (myViewModel.isFavorite.value == false){
+                    personatgeEscollit?.let { myViewModel.saveAsFavorite(it) }
+                }else personatgeEscollit?.let { myViewModel.removeFavorite(it) }
+                personatgeEscollit?.let { myViewModel.isFavorite(it) }
             }
         ){
-            Icon(Icons.Filled.FavoriteBorder, contentDescription = "home")
+            if (myViewModel.isFavorite.value == false){
+                Icon(Icons.Filled.FavoriteBorder, contentDescription = "home")
+            }else{
+                Icon(Icons.Filled.Favorite, contentDescription = "home")
+            }
         }
     }
 }
