@@ -45,7 +45,8 @@ fun FavScreen(navController: NavController,myViewModel:APIViewModel){
     if(showLoading){
         Column(modifier = Modifier
             .padding(20.dp)
-            .fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally){
+            .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally){
             Spacer(modifier = Modifier.height(300.dp))
             CircularProgressIndicator(
                 modifier = Modifier.width(64.dp),
@@ -61,7 +62,14 @@ fun FavScreen(navController: NavController,myViewModel:APIViewModel){
                 }
             }
         }else{
-            Text(text = "No hay personajes en favoritos.")
+            Column(modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center) {
+                Text(text = "No hay personajes en favoritos.",
+                    fontStyle = FontStyle.Italic,
+                    color = Color.LightGray)
+            }
+
         }
     }
 }

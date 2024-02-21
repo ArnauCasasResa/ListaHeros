@@ -45,7 +45,7 @@ fun MenuScreen(navController:NavController,myViewModel: APIViewModel){
         Column(modifier = Modifier
             .padding(20.dp)
             .fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally){
-            Spacer(modifier = Modifier.height(300.dp))
+            Spacer(modifier = Modifier.height(270.dp))
             CircularProgressIndicator(
                 modifier = Modifier.width(64.dp),
                 color = MaterialTheme.colorScheme.secondary

@@ -45,9 +45,11 @@ import retrofit2.Response
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun DetailScreen( myViewModel: APIViewModel){
-    myViewModel.getCharacter(myViewModel.getIdx())
     myViewModel.character.value?.let { myViewModel.isFavorite(it) }
+    myViewModel.getCharacter(myViewModel.getIdx())
     val personatgeEscollit by myViewModel.character.observeAsState()
+    val corazon by myViewModel.isFavorite.observeAsState(myViewModel.character.value?.let {
+        myViewModel.isFavorite(it)})
     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
         Card(
             border = BorderStroke(2.dp, Color.Transparent),
@@ -81,13 +83,15 @@ fun DetailScreen( myViewModel: APIViewModel){
         }
         Box(modifier = Modifier
             .clickable {
-                if (myViewModel.isFavorite.value == false){
+                if (corazon == false){
                     personatgeEscollit?.let { myViewModel.saveAsFavorite(it) }
                 }else personatgeEscollit?.let { myViewModel.removeFavorite(it) }
                 personatgeEscollit?.let { myViewModel.isFavorite(it) }
+
+                myViewModel.character.value?.let { myViewModel.isFavorite(it) }
             }
         ){
-            if (myViewModel.isFavorite.value == false){
+            if (corazon == false){
                 Icon(Icons.Filled.FavoriteBorder, contentDescription = "home")
             }else{
                 Icon(Icons.Filled.Favorite, contentDescription = "home")
