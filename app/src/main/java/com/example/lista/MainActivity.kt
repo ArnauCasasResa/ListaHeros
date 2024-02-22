@@ -64,7 +64,7 @@ class MainActivity : ComponentActivity() {
                                 startDestination = Routes.MenuScreen.route
                             ) {
                                 composable(Routes.MenuScreen.route) {MenuScreen(navigationController,myViewModel) }
-                                composable(Routes.DetailScreen.route) {DetailScreen(myViewModel)}
+                                composable(Routes.DetailScreen.route) {DetailScreen(navigationController,myViewModel)}
                                 composable(Routes.FavScreen.route) {FavScreen(navigationController,myViewModel)}
                             }
                         }

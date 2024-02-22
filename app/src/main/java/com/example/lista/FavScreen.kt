@@ -84,6 +84,7 @@ fun FavCharacterItem(character: Hero, navController: NavController,myViewModel: 
             .padding(8.dp)
             .clickable {
                 myViewModel.setIdx(character.id)
+                myViewModel.isFavorite(character)
                 navController.navigate(Routes.DetailScreen.route)
             }
     ) {

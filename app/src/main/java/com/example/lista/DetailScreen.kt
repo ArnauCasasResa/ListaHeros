@@ -40,12 +40,15 @@ import com.example.lista.api.interfaceApi
 import com.example.lista.model.Hero
 import com.example.lista.model.ListaHeros
 import com.example.retrofitapp.viewmodel.APIViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import retrofit2.Response
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun DetailScreen( myViewModel: APIViewModel){
-    myViewModel.character.value?.let { myViewModel.isFavorite(it) }
+fun DetailScreen( navController:NavController,myViewModel: APIViewModel){
     myViewModel.getCharacter(myViewModel.getIdx())
     val personatgeEscollit by myViewModel.character.observeAsState()
     val corazon by myViewModel.isFavorite.observeAsState(myViewModel.character.value?.let {
@@ -87,8 +90,12 @@ fun DetailScreen( myViewModel: APIViewModel){
                     personatgeEscollit?.let { myViewModel.saveAsFavorite(it) }
                 }else personatgeEscollit?.let { myViewModel.removeFavorite(it) }
                 personatgeEscollit?.let { myViewModel.isFavorite(it) }
-
                 myViewModel.character.value?.let { myViewModel.isFavorite(it) }
+                CoroutineScope(Dispatchers.Main).launch {
+                    delay(1000)
+                    navController.navigate(Routes.MenuScreen.route)
+                }
+
             }
         ){
             if (corazon == false){

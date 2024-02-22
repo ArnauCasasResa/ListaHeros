@@ -70,6 +70,7 @@ fun CharacterItem(character: Hero, navController: NavController,myViewModel: API
         modifier = Modifier
             .padding(8.dp)
             .clickable {myViewModel.setIdx(character.id)
+                myViewModel.isFavorite(character)
                 navController.navigate(Routes.DetailScreen.route) }
     ) {
         Row(modifier = Modifier
