@@ -29,16 +29,20 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.lista.model.Hero
 import com.example.lista.model.ListaHeros
+import com.example.lista.myviewmodel.ScrollableViewModel
 import com.example.retrofitapp.viewmodel.APIViewModel
 
 @Composable
-fun FavScreen(navController: NavController,myViewModel:APIViewModel){
+fun FavScreen(
+    navController: NavController,
+    myViewModel: APIViewModel,
+    myViewModelScroll: ScrollableViewModel
+){
     val showLoading: Boolean by myViewModel.loading.observeAsState(true)
     val characters: MutableList<Hero> by myViewModel.favCharacters.observeAsState(ListaHeros())
     myViewModel.getFavorites()

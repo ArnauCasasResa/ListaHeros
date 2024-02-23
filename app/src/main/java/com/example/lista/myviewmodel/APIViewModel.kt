@@ -1,6 +1,9 @@
 package com.example.retrofitapp.viewmodel
 
 import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.lista.api.Repository
@@ -22,11 +25,9 @@ class APIViewModel: ViewModel() {
     val loading = _loading
     private val _characters = MutableLiveData<ListaHeros>()
     val characters = _characters
-
-
     private var _favCharacters=MutableLiveData<MutableList<Hero>>()
     var favCharacters=_favCharacters
-    private var _isFavorite=MutableLiveData<Boolean>()
+    private var _isFavorite=MutableLiveData(false)
     var isFavorite=_isFavorite
     var character=MutableLiveData<Hero>()
     private var id=0
@@ -70,11 +71,13 @@ class APIViewModel: ViewModel() {
     fun saveAsFavorite(character:Hero){
         CoroutineScope(Dispatchers.IO).launch {
             repository.saveAsFavourite(character)
+            _isFavorite.postValue(true)
         }
     }
     fun removeFavorite(character:Hero){
         CoroutineScope(Dispatchers.IO).launch {
             repository.deleteFavourite(character)
+            _isFavorite.postValue(false)
         }
     }
     fun isFavorite(character:Hero){
@@ -91,5 +94,6 @@ class APIViewModel: ViewModel() {
     fun setIdx(num:Int){
         this.id=num
     }
+
 }
 

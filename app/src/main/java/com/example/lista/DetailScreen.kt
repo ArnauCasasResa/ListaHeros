@@ -23,6 +23,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -51,8 +52,8 @@ import retrofit2.Response
 fun DetailScreen( navController:NavController,myViewModel: APIViewModel){
     myViewModel.getCharacter(myViewModel.getIdx())
     val personatgeEscollit by myViewModel.character.observeAsState()
-    val corazon by myViewModel.isFavorite.observeAsState(myViewModel.character.value?.let {
-        myViewModel.isFavorite(it)})
+    val corazon by myViewModel.isFavorite.observeAsState(false)
+    personatgeEscollit?.let { myViewModel.isFavorite(it) }
     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
         Card(
             border = BorderStroke(2.dp, Color.Transparent),
@@ -78,6 +79,7 @@ fun DetailScreen( navController:NavController,myViewModel: APIViewModel){
                 personatgeEscollit?.let {
                     Text(
                         text = it.name,
+                        fontFamily = nameFont,
                         style = MaterialTheme.typography.bodyLarge,
                         textAlign = TextAlign.Center, modifier = Modifier.fillMaxSize()
                     )
@@ -89,19 +91,14 @@ fun DetailScreen( navController:NavController,myViewModel: APIViewModel){
                 if (corazon == false){
                     personatgeEscollit?.let { myViewModel.saveAsFavorite(it) }
                 }else personatgeEscollit?.let { myViewModel.removeFavorite(it) }
-                personatgeEscollit?.let { myViewModel.isFavorite(it) }
-                myViewModel.character.value?.let { myViewModel.isFavorite(it) }
-                CoroutineScope(Dispatchers.Main).launch {
-                    delay(1000)
-                    navController.navigate(Routes.MenuScreen.route)
-                }
-
             }
         ){
             if (corazon == false){
-                Icon(Icons.Filled.FavoriteBorder, contentDescription = "home")
+                Icon(Icons.Filled.FavoriteBorder, contentDescription = "home",
+                    tint = Color.Red)
             }else{
-                Icon(Icons.Filled.Favorite, contentDescription = "home")
+                Icon(Icons.Filled.Favorite, contentDescription = "home",
+                    tint = Color.Red)
             }
         }
     }
