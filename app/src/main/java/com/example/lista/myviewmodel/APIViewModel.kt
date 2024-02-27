@@ -19,7 +19,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class APIViewModel: ViewModel() {
-
     private val repository = Repository()
     private val _loading = MutableLiveData(true)
     val loading = _loading
@@ -37,6 +36,7 @@ class APIViewModel: ViewModel() {
             withContext(Dispatchers.Main) {
                 if(response.isSuccessful){
                     _characters.value = response.body()
+                    _charactersFromAPI.value=_characters.value
                     _loading.value = false
                 }
                 else{
@@ -93,6 +93,17 @@ class APIViewModel: ViewModel() {
     }
     fun setIdx(num:Int){
         this.id=num
+    }
+
+    private val _charactersFromAPI = MutableLiveData<ListaHeros>()
+    private val charactersFromAPI = _charactersFromAPI
+    private val _searchText = MutableLiveData("")
+    val searchText = _searchText
+    fun onSearchTextChange(text: String) {
+        _searchText.value = text
+        val filteredCharacters = charactersFromAPI.value?.filter { it.name.lowercase().contains(text.lowercase()) }
+        if (text.isEmpty()) characters.value = charactersFromAPI.value
+        else characters.value = ListaHeros().apply { addAll(filteredCharacters ?: emptyList()) }
     }
 
 }

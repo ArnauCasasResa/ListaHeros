@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
@@ -22,9 +21,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -40,21 +36,15 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.lista.model.Hero
 import com.example.lista.model.ListaHeros
-import com.example.lista.myviewmodel.ScrollableViewModel
 import com.example.retrofitapp.viewmodel.APIViewModel
 
 @Composable
 fun MenuScreen(
     navController: NavController,
-    myViewModel: APIViewModel,
-    myViewModelScroll: ScrollableViewModel
-) {
+    myViewModel: APIViewModel) {
     val showLoading: Boolean by myViewModel.loading.observeAsState(true)
     val characters: ListaHeros by myViewModel.characters.observeAsState(ListaHeros())
     myViewModel.getCharacters()
-
-    // Variable para almacenar la posición de desplazamiento
-    var scrollPosition by remember { mutableStateOf(0) }
 
     if (showLoading) {
         Column(
@@ -70,10 +60,7 @@ fun MenuScreen(
             )
         }
     } else {
-        LazyColumn(
-            // Restaurar la posición de desplazamiento al volver a la pantalla
-            state = rememberLazyListState(scrollPosition)
-        ) {
+        LazyColumn() {
             items(characters) {
                 CharacterItem(character = it, navController, myViewModel)
             }
