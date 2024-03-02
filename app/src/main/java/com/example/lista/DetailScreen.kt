@@ -50,6 +50,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import retrofit2.Response
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.unit.sp
@@ -57,6 +58,7 @@ import com.example.lista.model.Powerstats
 import com.github.tehras.charts.bar.BarChart
 import com.github.tehras.charts.bar.BarChartData
 import com.github.tehras.charts.bar.renderer.label.SimpleValueDrawer
+import org.w3c.dom.Text
 
 import kotlin.math.PI
 import kotlin.math.cos
@@ -85,7 +87,7 @@ fun DetailScreen( navController:NavController,myViewModel: APIViewModel) {
             ) {
                 Text(
                     text = "${personatgeEscollit?.id}.",
-                    fontFamily = titleFont
+                    fontFamily = nameFont
                 )
                 GlideImage(
                     model = personatgeEscollit?.images?.lg,
@@ -93,6 +95,7 @@ fun DetailScreen( navController:NavController,myViewModel: APIViewModel) {
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.size(300.dp)
                 )
+                Spacer(modifier = Modifier.height(10.dp))
                 personatgeEscollit?.let {
                     Text(
                         text = it.name,
@@ -135,8 +138,14 @@ fun DetailScreen( navController:NavController,myViewModel: APIViewModel) {
             }
             Box {
                 Column {
-                    Text(text = "Raza: ${personatgeEscollit?.appearance?.race}")
-                    Text(text = "Genero: ${personatgeEscollit?.appearance?.gender}")
+                    Text(text = "${personatgeEscollit?.biography?.fullName}, known as ${personatgeEscollit?.name}\n" +
+                            "Gender:\n${personatgeEscollit?.appearance?.gender}\n" +
+                            "Place of Birth:\n${personatgeEscollit?.biography?.placeOfBirth}\n" +
+                            "Race:\n${personatgeEscollit?.appearance?.race}\n" +
+                            "Alignment:\n${personatgeEscollit?.biography?.alignment}\n" +
+                            "First appearance:\n${personatgeEscollit?.biography?.firstAppearance}\n" +
+                            "Publisher:\n${personatgeEscollit?.biography?.publisher}\n",
+                        )
                 }
             }
         }
